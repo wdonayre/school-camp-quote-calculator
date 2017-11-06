@@ -1,0 +1,1 @@
+# school-camp-quote-calculator
