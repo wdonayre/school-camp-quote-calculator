@@ -1,0 +1,28 @@
+{
+
+    "compilerOptions": {
+        "outFile": "assets/js/scc-script.js",
+        "rootDir": "assets/js",
+
+        "declaration": false,
+        "removeComments": false,
+        "lib": [
+            "es5",
+            "dom"
+        ],
+        "target": "es5",
+        "allowSyntheticDefaultImports": true,
+        "importHelpers": false,
+        "inlineSourceMap": true,
+        "listFiles": false,
+        "traceResolution": false,
+        "pretty": true,
+        "baseUrl": ".", // required for "paths"
+        "paths": {
+            "scc-script-ts": ["assets/js/scc-script.js"] // write tests without relative paths
+        }
+    },
+    "include": [
+        "assets/js/*.ts"
+    ]
+}

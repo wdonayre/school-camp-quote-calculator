@@ -1,0 +1,16 @@
+{
+    "name": "scc-script",
+    "version": "1.0.0",
+    "license": "MIT",
+    "scripts": {
+        "build": "tsc --watch"
+    },
+    "devDependencies": {
+
+        "typescript": "^2.2.0"
+    },
+    "dependencies": {
+        "typescript-starter": "^1.2.1"
+    },
+    "private": true
+}

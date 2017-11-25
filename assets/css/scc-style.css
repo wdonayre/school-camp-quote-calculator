@@ -1,0 +1,685 @@
+* {}
+
+
+/*----------------------------
+GRID
+-----------------------------*/
+
+.grid {
+    margin-right: -8px;
+    margin-left: -8px;
+}
+
+.grid:before,
+.grid:after {
+    display: table;
+    content: " ";
+}
+
+.grid:after {
+    clear: both;
+}
+
+[class*="col-"] {
+    float: left;
+    box-sizing: border-box;
+    padding-right: 8px;
+    padding-left: 8px;
+}
+
+
+/* by percent */
+
+.col-100p {
+    width: 100%;
+}
+
+.col-90p {}
+
+.col-80p {}
+
+.col-70p {}
+
+.col-60p {}
+
+.col-50p {
+    width: 50%;
+}
+
+.col-40p {
+    width: 40%;
+}
+
+.col-30p {
+    width: 30%;
+}
+
+.col-20p {
+    width: 20%;
+}
+
+.col-10p {}
+
+
+/* by grid based on 12 grid 960 */
+
+.col-g-12 {}
+
+.col-g-11 {}
+
+.col-g-10 {}
+
+.col-g-9 {}
+
+.col-g-8 {}
+
+.col-g-7 {}
+
+.col-g-6 {}
+
+.col-g-5 {}
+
+.col-g-4 {
+    width: 33.3333%;
+}
+
+.col-g-3 {}
+
+.col-g-2 {}
+
+.col-g-1 {}
+
+
+/*----------------------------
+FORM GROUP
+----------------------------*/
+
+input[type="text"],
+input[type="email"],
+input[type="number"],
+input[type="date"] {
+    background: white;
+    font-size: 16px;
+    font-weight: normal;
+    border-radius: 3px;
+    border-color: #e0e0e0;
+    line-height: 16px;
+    padding: 8px 15px;
+    width: 100%;
+    min-height: 42px;
+}
+
+.form-group {
+    margin-bottom: 10px;
+    position: relative;
+}
+
+.form-group input[type="text"]+.overhead-label,
+.form-group input[type="email"]+.overhead-label,
+.form-group input[type="date"]+.overhead-label,
+.form-group input[type="number"]+.overhead-label {
+    display: none;
+    position: absolute;
+    left: 20px;
+    top: -5px;
+    font-size: 12px;
+    background: white;
+    padding: 0px 5px;
+    line-height: 12px;
+    color: #aaa;
+    text-transform: uppercase;
+    font-weight: normal;
+}
+
+.form-group input[type="text"]:focus+.overhead-label,
+.form-group input[type="email"]:focus+.overhead-label,
+.form-group input[type="date"]:focus+.overhead-label,
+.form-group input[type="number"]:focus+.overhead-label {
+    display: initial;
+}
+
+
+/* field group with error */
+
+.form-group .overhead-error {
+    position: absolute;
+    right: 15px;
+    top: -6px;
+    font-size: 10px;
+    background: red;
+    text-transform: uppercase;
+    color: white;
+    padding: 0 4px;
+    border-radius: 2px
+}
+
+.form-group.form-group-error input[type="text"],
+.form-group.form-group-error input[type="email"],
+.form-group.form-group-error input[type="date"],
+.form-group.form-group-error input[type="number"] {
+    border: 2px solid red;
+}
+
+.form-group.form-group-error input[type="text"]+.overhead-label,
+.form-group.form-group-error input[type="email"]+.overhead-label,
+.form-group.form-group-error input[type="date"]+.overhead-label,
+.form-group.form-group-error input[type="number"]+.overhead-label {
+    color: red;
+    display: initial;
+    font-weight: bold;
+}
+
+.form-group.form-group-error ::-webkit-input-placeholder {
+    color: white !important
+}
+
+.form-group.form-group-error ::-moz-placeholder {
+    color: white !important
+}
+
+.form-group.form-group-error :-ms-input-placeholder {
+    color: white !important
+}
+
+.form-group.form-group-error :-moz-placeholder {
+    color: white !important
+}
+
+.form-group input[type="text"]:focus::-webkit-input-placeholder,
+.form-group input[type="email"]:focus::-webkit-input-placeholder,
+.form-group input[type="date"]:focus::-webkit-input-placeholder,
+.form-group input[type="number"]:focus::-webkit-input-placeholder {
+    color: transparent;
+}
+
+.form-group input[type="text"]input:focus:-moz-placeholder,
+.form-group input[type="email"]input:focus:-moz-placeholder,
+.form-group input[type="date"]input:focus:-moz-placeholder,
+.form-group input[type="number"]input:focus:-moz-placeholder {
+    color: transparent;
+}
+
+
+/* FF 4-18 */
+
+.form-group input[type="text"]input:focus::-moz-placeholder,
+.form-group input[type="email"]input:focus::-moz-placeholder,
+.form-group input[type="date"]input:focus::-moz-placeholder,
+.form-group input[type="number"]input:focus::-moz-placeholder {
+    color: transparent;
+}
+
+
+/* FF 19+ */
+
+.form-group input[type="text"]input:focus:-ms-input-placeholder {
+    color: transparent;
+}
+
+
+/* IE 10+ */
+
+
+/* LABEL - Form Group Specific */
+
+.form-group>label {
+    font-weight: normal;
+    margin-bottom: 5px;
+}
+
+
+/*------------------------------
+    INFO
+-------------------------------*/
+
+.info-group {
+    background: #fefefe;
+    padding: 5px 12px;
+    border: 1px solid #f0f0f0;
+}
+
+.info-group label {
+    display: block;
+    text-transform: uppercase;
+    font-size: 12px;
+    color: #aaa;
+    font-weight: normal;
+}
+
+.info-group span {
+    font-weight: normal;
+    font-size: 14px;
+}
+
+
+/*-----------------------------
+    BUTTONS
+------------------------------*/
+
+.scc-btn {
+    font-weight: normal;
+    font-size: 16px;
+    padding: 5px 10px;
+    min-width: 120px;
+    text-transform: initial;
+}
+
+.scc-btn:hover {
+    cursor: pointer;
+    opacity: 0.8;
+    color: white;
+}
+
+.scc-cancel {
+    background: #e0e0e0;
+    color: #888;
+}
+
+.scc-next {}
+
+
+/*-----------------------------
+    TABLE
+-----------------------------*/
+
+table.scc-table thead th {
+    background: #646464;
+    padding-left: 12px;
+    color: white;
+    font-size: 12px;
+    font-weight: normal;
+}
+
+table.scc-table tbody tr td {
+    font-size: 14px;
+}
+
+
+/*-----------------------------
+    UTILITIES
+-----------------------------*/
+
+.d-block {
+    display: block;
+}
+
+
+/* MARGIN */
+
+.m-b-0 {
+    margin-bottom: 0;
+}
+
+.m-b-10 {
+    margin-bottom: 10px;
+}
+
+.m-t-30 {
+    margin-top: 30px;
+}
+
+
+/* PADDING */
+
+.p-b-30 {
+    padding-bottom: 30px;
+}
+
+
+/* FLOAT */
+
+.fl-left {
+    float: left;
+}
+
+.fl-right {
+    float: right;
+}
+
+.hidden {
+    display: block;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.tmpShow {
+    position: absolute;
+    visibility: hidden;
+    display: block !important;
+}
+
+
+/*--------------------------------
+    MODAL SPECIFIC STYLING
+--------------------------------*/
+
+
+/**/
+
+.scc-modal-wrapper {
+    position: fixed;
+    left: 0;
+    top: 0;
+    background: rgba(0, 0, 0, 0.4);
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+}
+
+.scc-modal-wrapper .scc-modal-content {
+    background: white;
+    max-width: 540px;
+    margin: 0 auto;
+    margin-top: 25px;
+    /* margin-top: 5%; */
+}
+
+.scc-modal-wrapper .scc-modal-content .scc-modal-header {
+    padding: 30px 25px;
+    /* text-align: center; */
+}
+
+.scc-modal-wrapper .scc-modal-content .scc-modal-header .scc-modal-title {
+    font-size: 22px;
+    /* line-height: 20px; */
+    font-weight: normal;
+}
+
+.scc-modal-sub-title {
+    font-size: 14px;
+    color: #949494;
+    font-weight: normal;
+    margin-top: 12px;
+}
+
+.scc-modal-body {
+    padding: 0 30px
+}
+
+
+/* LABELS  - Modal Specific */
+
+.scc-modal-wrapper label {
+    font-size: 14px;
+}
+
+.scc-modal-wrapper label input {
+    border: none;
+    outline: none;
+}
+
+
+/* FOOTER */
+
+.scc-modal-footer {
+    overflow: auto;
+    padding: 15px 30px;
+    border-top: 1px solid #e0e0e0;
+}
+
+
+/* MODAL CLOSE */
+
+.scc-modal-close {
+    background: url(../images/sprite.png) -31px -32px;
+    background-size: 76px 53px;
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    border-bottom: none !important;
+    float: right;
+    margin-right: 8px;
+    margin-top: 8px;
+}
+
+.scc-modal-close:hover {
+    background-position: -5px -32px;
+    cursor: pointer;
+}
+
+
+/* price breakdown */
+
+.total-price span {
+    font-size: 18px;
+    color: #048F0E;
+    font-weight: bold;
+}
+
+.total-price+a {
+    font-size: 14px;
+    vertical-align: text-bottom;
+    margin-left: 15px;
+}
+
+
+/* ACTIVITY SELECTOR */
+
+.activity-selector-wrapper {
+    /*     max-height: 252px;
+    overflow-y: scroll;
+    width: 100%;
+    border: 1px solid #e0e0e0;
+    padding: 10px 5px;
+    border-radius: 5px;
+    box-sizing: border-box;
+    box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.1); */
+}
+
+.activity-selector-wrapper .activity-item {
+    border-radius: 3px;
+    position: relative;
+    height: 100px;
+    background-size: cover;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+.activity-selector-wrapper .activity-item:before {
+    background: black;
+    opacity: 0.1;
+    position: absolute;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+    content: '';
+    left: 0px;
+    bottom: 0px;
+}
+
+.activity-selector-wrapper .activity-item.selected {
+    border: 2px solid #55b49f !important;
+    position: relative;
+}
+
+.activity-selector-wrapper .activity-item.selected:before {
+    opacity: 0.2;
+    background: #55b49f;
+    position: absolute;
+    display: inline-block;
+}
+
+.activity-selector-wrapper .activity-item.selected:after {
+    content: '';
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    z-index: 15;
+    display: inline-block;
+    background-image: url(data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTkuMC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iTGF5ZXJfMSIgeD0iMHB4IiB5PSIwcHgiIHZpZXdCb3g9IjAgMCAyODYuMDU0IDI4Ni4wNTQiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDI4Ni4wNTQgMjg2LjA1NDsiIHhtbDpzcGFjZT0icHJlc2VydmUiIHdpZHRoPSI1MTJweCIgaGVpZ2h0PSI1MTJweCI+CjxnPgoJPHBhdGggc3R5bGU9ImZpbGw6IzNEQjM5RTsiIGQ9Ik0xNDMuMDMxLDBDNjQuMDI3LDAsMC4wMDQsNjQuMDQsMC4wMDQsMTQzLjAyN2MwLDc4Ljk5Niw2NC4wMzEsMTQzLjAyNywxNDMuMDI3LDE0My4wMjcgICBjNzguOTg3LDAsMTQzLjAxOC02NC4wMzEsMTQzLjAxOC0xNDMuMDI3QzI4Ni4wNDksNjQuMDQ5LDIyMi4wMTgsMCwxNDMuMDMxLDB6IE0xNDMuMDMxLDI1OS4yMzYgICBjLTY0LjE4MywwLTExNi4yMDktNTIuMDI2LTExNi4yMDktMTE2LjIwOVM3OC44NTcsMjYuODE4LDE0My4wMzEsMjYuODE4czExNi4yLDUyLjAyNiwxMTYuMiwxMTYuMjA5ICAgUzIwNy4yMDYsMjU5LjIzNiwxNDMuMDMxLDI1OS4yMzZ6IE0xOTkuMjQxLDgyLjE4N2MtNi4wNzktMy42MjktMTMuODQ3LTEuNDc1LTE3LjM0Miw0LjgyN2wtNDcuOTU5LDg2LjE0N2wtMjYuNzEtMzIuNTEyICAgYy00LjgzNi01LjU2OS0xMS4yNjMtOC40NTYtMTcuMzMzLTQuODI3Yy02LjA3OSwzLjYzOC04LjU5MSwxMi4zOS00LjY1NywxOC4wMDRsMzcuMTY5LDQ1LjI0MWMyLjc4LDMuNjExLDUuOTUzLDUuNzc1LDkuMjcsNi4zOTIgICBsMC4wMjcsMC4wNTRsMC4zNCwwLjAxOGMwLjc1MSwwLjExNiwxMS45NzksMi4xOSwxNi44MTUtNi40NjNsNTUuMDQ4LTk4Ljg3NkMyMDcuNDAyLDkzLjg3OSwyMDUuMzIsODUuODI1LDE5OS4yNDEsODIuMTg3eiIvPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+Cjwvc3ZnPgo=);
+    background-size: cover;
+    background-color: transparent;
+    opacity: 1;
+    bottom: 10px;
+    left: 10px;
+}
+
+.activity-selector-wrapper .activity-item:hover {
+    cursor: pointer;
+}
+
+.activity-selector-wrapper .activity-item:hover:before {
+    opacity: 0.5;
+}
+
+.activity-item .activity-item-title {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    color: white;
+    font-weight: normal;
+    font-size: 14px;
+    z-index: 15;
+}
+
+.activity-item .activity-item-price {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    color: white;
+    font-weight: normal;
+    z-index: 15;
+}
+
+
+/* ALERT */
+
+.scc-alert {
+    text-align: center;
+    padding: 10px 10px 50px 10px;
+}
+
+.scc-alert h2 {
+    font-size: 22px;
+    font-weight: normal;
+}
+
+.scc-alert h2 img {
+    width: 32px;
+}
+
+.scc-alert p {
+    font-weight: normal;
+    font-size: 16px;
+}
+
+
+/*-----------------------------
+    TOTAL BREAKDOWN VIEW WRAPPER
+-----------------------------*/
+
+.total-wrapper {
+    padding: 0 0 25px 0;
+    font-size: 18px;
+}
+
+.total-wrapper label {
+    color: #6ba500;
+    font-size: 18px;
+}
+
+
+/*-----------------------------------
+    MODAL CONTENT SCROLL ACTIVATED
+-----------------------------------*/
+
+.scc-modal-inner.scc-modal-content-scroll {
+    /* overflow: hidden; */
+}
+
+.scc-modal-inner.scc-modal-content-scroll.active .scc-modal-header {
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.4);
+}
+
+.scc-modal-inner.scc-modal-content-scroll.active .scc-modal-body {
+    overflow-y: scroll;
+    border-top: 1px solid #e0e0e0;
+    padding-top: 25px;
+}
+
+.scc-modal-inner.scc-modal-content-scroll.active .scc-modal-footer {
+    box-shadow: 0px 0px 17px rgba(0, 0, 0, 0.2);
+}
+
+.main-price-total span {
+    font-size: 18px;
+    font-weight: bold;
+    color: #4b9200;
+}
+
+
+/*-------------------------------------
+  CALENDAR
+-------------------------------------*/
+
+div#ui-datepicker-div {
+    background: white;
+    padding: 25px;
+    border: 1px solid #e0e0e0;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2)
+}
+
+div#ui-datepicker-div .ui-datepicker-header {
+    font-size: 12px;
+    margin-bottom: 10px
+}
+
+div#ui-datepicker-div .ui-datepicker-header .ui-datepicker-title,
+div#ui-datepicker-div .ui-datepicker-header>a {
+    display: inline-block;
+}
+
+div#ui-datepicker-div .ui-datepicker-header>a {
+    display: inline-block;
+    background: #ed2625;
+    color: white;
+    width: 50px;
+    text-align: center;
+    margin-right: 5px
+}
+
+div#ui-datepicker-div .ui-datepicker-header>a:hover {
+    cursor: pointer;
+    opacity: 0.8;
+}
+
+div#ui-datepicker-div .ui-datepicker-header .ui-datepicker-title {
+    float: right;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+div#ui-datepicker-div th,
+div#ui-datepicker-div td {
+    font-size: 12px;
+}
+
+div#ui-datepicker-div td>a {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    background: #f5f5f5;
+}
+
+div#ui-datepicker-div td.ui-datepicker-current-day>a {
+    border-radius: 100%;
+    background: #0260ac;
+    color: white
+}
+
+div#ui-datepicker-div td>a:hover {
+    background: #ed2625 !important;
+    color: white;
+}
+
+div#ui-datepicker-div td.ui-state-disabled {
+    color: #ddd;
+}
+
+.scc-modal-fixed {
+    position: fixed;
+}
