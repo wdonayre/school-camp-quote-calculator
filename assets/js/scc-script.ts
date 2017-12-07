@@ -16,6 +16,9 @@ class SCC_Calculator{
     private _breakdown:any[];
     private _priceList:any;
     private _total:number = 0.00;
+    private _endpoint = '';
+    private _breakdownSummary;
+    private _totalDetails:any;
 
     constructor(private _mainWrapper:any){
         $=jQuery;
@@ -23,7 +26,15 @@ class SCC_Calculator{
         this._fields = {};
         this._formSteps = [{}];
         this._breakdown = [];
+        
+        this._totalDetails = {
+            adults:0,
+            child:0
+        };
     } 
+    public registerEndpointURL(url:string){
+        this._endpoint = url;
+    }
 
     public registerPriceList(pl){
         this._priceList = {};
@@ -96,7 +107,7 @@ class SCC_Calculator{
 
                 let valid:boolean = obj.validateFields( $(element).closest('.scc-modal-inner').find('.form-group input'));
 
-                if(valid){
+                if(valid && ($(element).closest('.scc-modal-inner').attr('data-view') !== 'breakdown')){
                     $(element).closest('.scc-modal-inner').hide().removeClass('active');
                     $($(element).closest('.scc-modal-inner').parent().find('.scc-modal-inner')[index+1]).fadeIn().addClass('active');
                 
@@ -150,7 +161,7 @@ class SCC_Calculator{
                                 if(allowed)
                                 {
                                     activitiesArray += '<div class="col-g-4">'+
-                                                    '<div class="activity-item form-group" style="background-image:url(http://plugindev.dev/wp-content/plugins/school-camp-calculator/assets/images/mountain-climbing.jpg)">'+
+                                                    '<div class="activity-item form-group" style="background-image:url(/wp-content/plugins/school-camp-calculator/assets/images/mountain-climbing.jpg)">'+
                                                         '<label class="activity-item-title">'+tmpActivity.text+'</label>'+
                                                         '<span class="activity-item-price">$ '+tmpPrice+'</span>'+
                                                         '<input class="disabled" type="hidden" name="activities" value="'+tmpActivity.name+'" />'+
@@ -170,6 +181,10 @@ class SCC_Calculator{
                         $(element).find('span').text('$'+obj.getTotal());
                     });
                     //this.getTotal()
+                }
+                else
+                {
+                    obj.submitFields();    
                 }
                 console.log(obj._fields); //TEMPORARY
                 this._total = obj.getTotal();
@@ -216,9 +231,9 @@ class SCC_Calculator{
     }
 
     public updateBreakdown(wrapper:any){
-        let key:string = $(wrapper).attr('data-breakdown');;
+        let key:string = $(wrapper).attr('data-breakdown');
         
-        if(key!= undefined)
+        if(key!= undefined && key!== 'end-meal')
         {
             if(typeof this._breakdown[key] === 'undefined')
             {
@@ -245,14 +260,62 @@ class SCC_Calculator{
                         amount: this._priceList.accommodation.adults * diff * numAdults
                     },
                     {
-                        text:'Children',
+                        text:'Child',
                         quantity: diff,
                         amount: this._priceList.accommodation.others * diff * numChild
                     }
                 ]
             };
+
         }
-        else if(key==='meals')
+        else if(key==='end-meal')
+        {
+            let endMealIndex  = this._priceList['meals'][this._fields['end-meal']].index;
+            //console.log("Meal Index: " + endMealIndex);
+            let mealKey = 'meals';
+            let startMealIndex  = this._priceList[mealKey][this._fields.meal].index;
+            let mealCount:any[] = [];
+            let mealItems:any[] = [];
+            for(let d:number = 0;d <= diff;d++)
+            {
+                for(let m:number=startMealIndex; m<this._priceList['mealArray'][mealKey].length; m++)
+                {
+
+                    startMealIndex = 0; //back to first meal index
+                    let endMealFlag:boolean = false;
+                    if((d == (diff)) && (m>endMealIndex))
+                    {
+                        endMealFlag = true;
+                    }
+
+                    if(endMealFlag == false){
+                        if(typeof mealItems[m] === 'undefined'){
+                            mealItems[m] = {text:this._priceList['mealArray'][mealKey][m]['text'],items:[  {text:'Adults',quantity:0,amount:0}, {text:'Child',quantity:0,amount:0}  ]};
+                        }
+                        //Adults
+                        mealItems[m]['items'][0]['quantity'] += 1;
+                        mealItems[m]['items'][0]['text'] = 'Adults @ '+numAdults + 'pax/' +mealItems[m]['items'][0]['quantity']+'meal(s)';
+                        mealItems[m]['items'][0]['amount'] = mealItems[m]['items'][0]['quantity'] * numAdults * this._priceList[mealKey][this._priceList['mealArray']['meals'][m]['name']]['price']['adults'];
+                        //Child
+                        mealItems[m]['items'][1]['quantity'] += 1;
+                        mealItems[m]['items'][1]['text'] = 'Child @ '+numChild + 'pax/' +mealItems[m]['items'][1]['quantity']+'meal(s)';
+                        mealItems[m]['items'][1]['amount'] = mealItems[m]['items'][1]['quantity'] * numChild * this._priceList[mealKey][this._priceList['mealArray']['meals'][m]['name']]['price']['others'];
+                        
+
+                   }
+                }
+                
+            }
+
+            mealItems = this.arrayClean(undefined,mealItems);
+
+            this._breakdown[mealKey] = {
+                text:mealKey,
+                items:mealItems    
+            };
+            
+        }
+        else if(key==='mealsxxxxxxx') //to be removed
         {
             let startMealIndex  = this._priceList[key][this._fields.meal].index;
             let mealCount:any[] = [];
@@ -263,7 +326,6 @@ class SCC_Calculator{
                 {
 
                     startMealIndex = 0; //back to first meal index
-
                     if(typeof mealItems[m] === 'undefined'){
                         mealItems[m] = {text:this._priceList['mealArray']['meals'][m]['text'],items:[  {text:'Adults',quantity:0,amount:0}, {text:'Child',quantity:0,amount:0}  ]};
                     }
@@ -297,11 +359,12 @@ class SCC_Calculator{
                     this._priceList['activities'][this._fields.activities[a]]['price']['default'];
 
                 let totalPax:number = (parseInt(this._fields['number-of-adults']) + parseInt(this._fields['number-of-child']));
-                activityItems[a] = {text:this._priceList['activities'][this._fields.activities[a]]['text']+' @ '+totalPax+'pax',amount: tmpPrice * totalPax};
+                activityItems[a] = {text:this._priceList['activities'][this._fields.activities[a]]['text']+' @ '+totalPax+'pax',amount: tmpPrice * totalPax,price:tmpPrice};
+            
             }
             this._breakdown[key] = {
                 text:key,
-                items:activityItems    
+                items:activityItems 
             };
         }
         console.log('breakdown:::');
@@ -424,16 +487,29 @@ class SCC_Calculator{
     ------------------------*/
     private getTotal(){
         let ret:number = 0;
+
+        this._totalDetails.adults = 0;
+        this._totalDetails.child = 0;
+
         for(let key in this._breakdown){
             if (key != undefined)
             {
                 for(let i:number=0;i<this._breakdown[key].items.length;i++){
                     if(key ==='accommodation'){
                         ret += this._breakdown[key].items[i].amount;
+                        if(this._breakdown[key].items[i].text === 'Adults'){
+                            this._totalDetails.adults += this._breakdown[key].items[i].amount;
+                        }
+                        else if(this._breakdown[key].items[i].text === 'Child'){
+                            this._totalDetails.child += this._breakdown[key].items[i].amount;
+                        }
                     } 
                     else if(key==='meals')
                     {
                         ret += this._breakdown[key].items[i].items[0].amount + this._breakdown[key].items[i].items[1].amount;
+                        
+                        this._totalDetails.adults += this._breakdown[key].items[i].items[0].amount;
+                        this._totalDetails.child  += this._breakdown[key].items[i].items[1].amount;
                     }  
                     else if(key === 'activities')
                     {
@@ -442,6 +518,20 @@ class SCC_Calculator{
                 }  
             }
         }
+
+        if(this._fields['activities']){
+            for(let a:number = 0;a < this._fields.activities.length;a++){
+                var tmpPrice = (
+                    typeof this._priceList['activities'][this._fields.activities[a]]['price']['default'] === 'undefined')?
+                    this._priceList['activities'][this._fields.activities[a]]['price']['adults']:
+                    this._priceList['activities'][this._fields.activities[a]]['price']['default'];
+
+                this._totalDetails.adults += this._fields['number-of-adults'] * tmpPrice;
+                this._totalDetails.child += this._fields['number-of-child'] * tmpPrice;
+            }
+        }
+        console.log('TOTAL DETAILS: ');
+        console.log(this._totalDetails);
         this._total = ret;
         return parseFloat(ret+'').toFixed(2);
     }
@@ -451,6 +541,12 @@ class SCC_Calculator{
     private renderBreakdownView(){
         let breakdownView:any = $(this._mainWrapper).find('.scc-modal-inner[data-view="breakdown"] .scc-modal-body .grid');  
         
+        this._breakdownSummary = {
+            'activities':{},
+            'meals':{},
+            'accommodation':{}
+        };
+
         //clear contents
         $(breakdownView).html('');
 
@@ -466,8 +562,11 @@ class SCC_Calculator{
 
 
         //ACCOMMODATION
-        tmpTables += '<table class="scc-table">'+'<thead>'+'<tr>'+'<th colspan="2">Accommodation</th>'+'</tr>'+'</thead>'+'<tbody>'+'<tr>'+'<td>'+this._breakdown['accommodation']['items'][0].text+'@'+this._fields['number-of-adults']+'pax/'+this._breakdown['accommodation']['items'][0].quantity+'days'+'</td>'+'<td class="text-right">$'+parseFloat(this._breakdown['accommodation']['items'][0].amount).toFixed(2)+'</td>'+'</tr>'+'<tr>'+'<td>'+this._breakdown['accommodation']['items'][1].text+'@'+this._fields['number-of-child']+'pax/'+this._breakdown['accommodation']['items'][1].quantity+'days'+'</td>'+'<td class="text-right">$'+parseFloat(this._breakdown['accommodation']['items'][1].amount).toFixed(2)+'</td>'+'</tr>'+'</tbody>'+'</table>';
-
+        tmpTables += '<table class="scc-table">'+'<thead>'+'<tr>'+'<th colspan="2">Accommodation</th>'+'</tr>'+'</thead>'+'<tbody>'+'<tr>'+'<td>'+this._breakdown['accommodation']['items'][0].text+'@'+this._fields['number-of-adults']+'pax/'+this._breakdown['accommodation']['items'][0].quantity+'days'+'</td>'+'<td class="text-right">$'+parseFloat(this._breakdown['accommodation']['items'][0].amount).toFixed(2)+'</td>'+'</tr>'+'<tr>'+'<td>'+this._breakdown['accommodation']['items'][1].text+'@'+this._fields['number-of-child']+'pax/'+this._breakdown['accommodation']['items'][1].quantity+'days'+'</td>'+'<td class="text-right">$'+parseFloat(this._breakdown['accommodation']['items'][1].amount).toFixed(2)+'</td>'+'</tr>'+'<tr><td colspan="2" class="subtotal">Subtotal: <span>$'+ parseFloat((this._breakdown['accommodation']['items'][0].amount + this._breakdown['accommodation']['items'][1].amount)+'').toFixed(2) +'</span></td></tr></tbody>'+'</table>';
+        //Update breakdown summary
+        this._breakdownSummary.accommodation = this._breakdown['accommodation']['items'];
+        
+        
         //MEALS
         var _tbl = '';
         if(typeof this._breakdown['meals'] === 'undefined')
@@ -475,11 +574,27 @@ class SCC_Calculator{
             this._breakdown['meals'] = {items:[]};
         }
 
+        let mealAdultTotal = 0;
+        let mealChildTotal = 0;
+        let mealQtyAdults = 0;
+        let mealQtyChild = 0;
+
         for(let m:number=0;m<this._breakdown['meals'].items.length;m++){
-            _tbl+='<tr><td colspan="2"><strong>'+this._breakdown['meals'].items[m]['text']+'</strong></td></tr>'
-            _tbl+='<tr><td>'+this._breakdown['meals'].items[m].items[0]['text']+'</td><td class="text-right">$'+parseFloat(this._breakdown['meals'].items[m].items[0]['amount']).toFixed(2)+'</td></tr>'
-            _tbl+='<tr><td>'+this._breakdown['meals'].items[m].items[1]['text']+'</td><td class="text-right">$'+parseFloat(this._breakdown['meals'].items[m].items[1]['amount']).toFixed(2)+'</td></tr>'
+            //_tbl+='<tr><td colspan="2"><strong>'+this._breakdown['meals'].items[m]['text']+'</strong></td></tr>'
+            //_tbl+='<tr><td>'+this._breakdown['meals'].items[m].items[0]['text']+'</td><td class="text-right">$'+parseFloat(this._breakdown['meals'].items[m].items[0]['amount']).toFixed(2)+'</td></tr>'
+            //_tbl+='<tr><td>'+this._breakdown['meals'].items[m].items[1]['text']+'</td><td class="text-right">$'+parseFloat(this._breakdown['meals'].items[m].items[1]['amount']).toFixed(2)+'</td></tr>'
+            mealAdultTotal  += this._breakdown['meals'].items[m].items[0]['amount'];
+            mealQtyAdults   += this._breakdown['meals'].items[m].items[0].quantity;
+            mealChildTotal  += this._breakdown['meals'].items[m].items[1]['amount'];
+            mealQtyChild    += this._breakdown['meals'].items[m].items[1].quantity;
         }
+        this._breakdownSummary.meals = {
+            adults:{ quantity: mealQtyAdults, amount: mealAdultTotal},
+            child: { quantity: mealQtyChild, amount: mealChildTotal}
+        };
+        _tbl+='<tr><td>Adults @ '+mealQtyAdults+' meal(s)</td><td class="text-right">$'+parseFloat(mealAdultTotal+'').toFixed(2)+'</td></tr>';
+        _tbl+='<tr><td>Child @ '+mealQtyChild+' meal(s)</td><td class="text-right">$'+parseFloat(mealChildTotal+'').toFixed(2)+'</td></tr>';
+        _tbl+='<tr><td colspan="2" class="subtotal">Subtotal: <span>$'+ parseFloat((mealAdultTotal + mealChildTotal)+'').toFixed(2) +'</span></td></tr>';
         tmpTables += '<table class="scc-table">'+'<thead>'+'<tr>'+'<th colspan="2">Meals</th>'+'</tr>'+'</thead>'+'<tbody>'+_tbl+'</tbody>'+'</table>';
         
         
@@ -489,21 +604,52 @@ class SCC_Calculator{
         {
             this._breakdown['activities'] = {items:[]};
         }
+        let activityTotalAmount = 0;
+        this._breakdownSummary.activities = [];
         for(let m:number=0;m<this._breakdown['activities'].items.length;m++){
             _tbl+=  '<tr>'+
                         '<td>'+this._breakdown['activities'].items[m]['text']+'</td>'+
                         '<td class="text-right">$'+parseFloat(this._breakdown['activities'].items[m]['amount']).toFixed(2)+'</td>'+
                     '</tr>';
+            this._breakdownSummary.activities.push({activity:this._breakdown['activities'].items[m]['text'], amount: this._breakdown['activities'].items[m]['amount'],price:this._breakdown['activities'].items[m]['price']});
+            activityTotalAmount += this._breakdown['activities'].items[m]['amount'];
         }
+        _tbl += '<tr><td colspan="2" class="subtotal">Subtotal: <span>$'+ parseFloat(activityTotalAmount + '').toFixed(2) +'</span></td></tr>';
         tmpTables += '<table class="scc-table">'+'<thead>'+'<tr>'+'<th colspan="2">Activities</th>'+'</tr>'+'</thead>'+'<tbody>'+_tbl+'</tbody>'+'</table>';
-
+        
         $(breakdownView).append('<div class="col-100p">'+tmpTables+'</div>');
 
-        $(breakdownView).append('<div class="main-price-total">TOTAL: <span>$'+parseFloat(this._total+'').toFixed(2)+'</span></div><br>')
+        $(breakdownView).append('<div class="main-price-total">ADULT TOTAL: <span style="color:#343434;">$'+parseFloat(this._totalDetails.adults+'').toFixed(2)+'</span> <br> CHILD TOTAL: <span style="color:#343434;">$'+parseFloat(this._totalDetails.child+'').toFixed(2)+'</span> <br> <strong>GENERAL TOTAL:</strong> <span>$'+parseFloat(this._total+'').toFixed(2)+'</span></div><br>')
 
+
+        console.log("BREAKDOWN");
+        console.log(this._breakdown);
+        //console.log(this._breakdownSummary);
     }
 
+    /*------------------------
+        Submit Fields
+    ------------------------*/
+    private submitFields(){
+        
+        var tmpData = {
+           info:this._fields,
+           items:this._breakdownSummary
+        }
+        
+        $.ajax({
+            url: this._endpoint,
+            type: "post",
+            data:tmpData,
+            complete: function(){
+                $('.scc-modal-wrapper .scc-modal-inner').hide();
+                $('.scc-modal-wrapper .scc-modal-inner[data-view="thankyou"]').fadeIn();
+            }
+        });
+    }
 }
+
+
 
 jQuery(document).ready(function($){
     //temporary
@@ -599,8 +745,7 @@ jQuery(document).ready(function($){
                     max:null
                 },
                 price:{
-                    adults:35,
-                    others:20
+                    default:35
                 }
             },
             {
@@ -739,6 +884,7 @@ jQuery(document).ready(function($){
     var scc = new SCC_Calculator($('.scc-modal-wrapper'));
     scc.registerFieldArray('activities'); //register field activities to support multiple answers
     scc.registerPriceList(priceList);
+    scc.registerEndpointURL('/scc/v1');
     scc.init();
     // $('.scc-modal-wrapper .scc-modal-inner').each(function(index,element){
     

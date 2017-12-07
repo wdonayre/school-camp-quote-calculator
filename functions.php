@@ -67,5 +67,13 @@ function SCC_enqueue_admin_styles() { // admin
     //wp_enqueue_script('custom-admin', get_stylesheet_directory_uri() . '/admin.js', false, filemtime( get_stylesheet_directory().'/admin.js' ), true);
 } add_action( 'admin_enqueue_scripts', 'SCC_enqueue_admin_styles' );
 
+/**/
+require_once 'includes/mailer/mailer.php';
+
+//init SCC Mailer Endpoint
+new SCC_Obj();
+
+
+
 
 
