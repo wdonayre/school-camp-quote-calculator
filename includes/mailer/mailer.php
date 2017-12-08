@@ -56,6 +56,7 @@ class SCC_Obj {
 		$ret = null;
 		
 		
+		/* ==== SEND TO CUSTOMER ==== */
 
 		$message = file_get_contents(__DIR__.'/common-header.html');
 		$message .= $this->getCustomerContent();
@@ -67,8 +68,20 @@ class SCC_Obj {
 		$headers[] = 'To: '.$_POST['info']['name'].' <'.$_POST['info']['email'].'>';
 		$headers[] = 'From: Koojarewon Youth Camp - Enquiry';
 
-		mail($to, $subject, $message, implode("\r\n", $headers));
+		mail($_POST['info']['email'], 'Thank You for your Enquiry', $message, implode("\r\n", $headers));
 
+		/* ==== SEND TO ADMIN ==== */
+		$message = file_get_contents(__DIR__.'/common-header.html');
+		$message .= $this->getAdminContent();
+		$message .= file_get_contents(__DIR__.'/common-footer.html');
+
+		$headers[] = 'MIME-Version: 1.0';
+		$headers[] = 'Content-type: text/html; charset=iso-8859-1';
+
+		$headers[] = 'To: '.stripslashes(get_option('admin-email', ''));
+		$headers[] = 'From: '.$_POST['info']['name'].'<'.$_POST['info']['email'].'>';
+
+		mail(stripslashes(get_option('admin-email', '')), 'Enquiry/Quote', $message, implode("\r\n", $headers));
 		
 
         //$this->send_response($_POST['items']['activities'][0]['activity']);
@@ -238,6 +251,124 @@ class SCC_Obj {
 													</table>
 
                                                     <br><br> One of our friendly personnel will connect with you shortly.
+
+                                                    <br><br><br> Cheers,
+                                                    <br> KYC Family
+                                                    <br>
+                                                </td>
+                                            </tr>
+                                            <!-- End of content -->
+                                            <!-- Spacing -->
+                                            <tr>
+                                                <td width="100%" height="20" style="font-size:1px; line-height:1px; mso-line-height-rule: exactly;">&nbsp;</td>
+                                            </tr>
+                                            <!-- End of Spacing -->
+                                        </tbody></table>
+                                    </td>
+                                </tr>
+                            </tbody></table>
+                        </td>
+                    </tr>
+				</tbody></table>
+				
+		<?php
+		return ob_get_clean();
+	}
+
+
+	private function getAdminContent(){
+		$ret = "";
+
+		ob_start();
+		?>
+
+	<table bgcolor="#ffffff" width="600" cellpadding="0" cellspacing="0" border="0" align="center" class="devicewidth">
+                    <tbody><tr>
+                        <td align="center">
+                            <table width="600" cellpadding="0" cellspacing="0" border="0" align="center" class="devicewidth">
+                                <!-- Spacing -->
+                                <tbody><tr>
+                                    <td width="100%" height="30" style="font-size:1px; line-height:1px; mso-line-height-rule: exactly;">&nbsp;</td>
+                                </tr>
+                                <!-- End of Spacing -->
+                                <tr>
+                                    <td align="center" style="">
+                                        <table width="100%" align="left" cellpadding="0" cellspacing="0" border="0" class="devicewidthinner">
+                                            <!-- Title -->
+                                            <tbody>
+											<tr>
+                                                <td style="padding:0 40px; font-family: Helvetica, Arial, sans-serif; text-align:left; font-weight:bold; font-size: 18px; line-height:24px; ">
+                                                    New Enquiry Request!
+                                                </td>
+                                            </tr>
+                                            <!-- End of Title -->
+                                            <!-- Spacing -->
+                                            <tr>
+                                                <td height="15" style="font-size:1px; line-height:1px; mso-line-height-rule: exactly;">&nbsp;</td>
+                                            </tr>
+                                            <!-- End of Spacing -->
+                                            <!-- Content -->
+                                            <tr>
+                                                <td style="padding:0 40px; font-family: Helvetica, Arial, sans-serif; font-weight: normal; font-size:14px; color: #0E0E0E; line-height:18px; text-align:left;">
+                                                    Here is the details of the enquiry:
+
+                                                    <br><br>
+                                                    <table width="100%">
+                                                        <tbody><tr>
+                                                            <th>Name</th>
+                                                            <td><?php echo $_POST['info']['name']?></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>Email</th>
+                                                            <td><?php echo $_POST['info']['email']?></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>Arrival Date</th>
+                                                            <td><?php echo $_POST['info']['arrival-date']?></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>Departure Date</th>
+                                                            <td><?php echo $_POST['info']['departure-date']?></td>
+                                                        </tr>
+														<tr>
+                                                            <th>Start Meal</th>
+                                                            <td><?php echo $_POST['info']['meal']?></td>
+                                                        </tr>
+														<tr>
+                                                            <th>Last Meal</th>
+                                                            <td><?php echo $_POST['info']['end-meal']?></td>
+                                                        </tr>
+                                                    </tbody></table>
+                                                    <br>
+													<!-- insert content here -->
+													
+													<table width="100%">
+														<!-- accommodation-->
+														<?php echo $this->getItem('accommodation');?>
+														<!-- meals-->
+														<?php echo $this->getItem('meals');?>
+														<!-- activities-->
+														<?php echo $this->getItem('activities');?>
+
+														<!-- general total -->
+														<tr>
+															<td colspan="2" style="padding:3px 5px; text-align:left; background:#f5f5f5;">
+																ADULT TOTAL: $<?php echo number_format($this->adultTotal,2); ?>
+															</td>
+														</tr>
+
+														<tr>
+															<td colspan="2" style="padding:3px 5px; text-align:left; background:#f5f5f5;">
+																CHILD TOTAL: $<?php echo number_format($this->childTotal,2); ?>
+															</td>
+														</tr>
+														<tr>
+															<td colspan="2" style="font-weight:bold; padding:3px 5px; text-align:left; background:#f5f5f5; font-size:16px;">
+																GENERAL TOTAL: $<?php echo number_format(($this->childTotal + $this->adultTotal),2); ?>
+															</td>
+														</tr>
+														
+													</table>
 
                                                     <br><br><br> Cheers,
                                                     <br> KYC Family

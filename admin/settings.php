@@ -25,7 +25,9 @@ function scc_render_settings_page() {
 
     $ret = array(
         'priceConfig' => stripslashes(get_option('price-config', '')),
-        'workflowConfig' => stripslashes(get_option('workflow-config', ''))
+        'workflowConfig' => stripslashes(get_option('workflow-config', '')),
+        'adminEmail' => stripslashes(get_option('admin-email', '')),
+
     );
 
     ob_start();
@@ -36,7 +38,10 @@ function scc_render_settings_page() {
 
             <?php echo wp_nonce_field( 'scc_settings_nonce' ); ?>
             <input type="hidden" name="admin_save" value="" />
-
+            <div class="scc-form-group">
+                <label for="admin-email">Admin Email</label>
+                <input name="admin-email" value="<? echo $ret['adminEmail'] ?>" />
+            </div>
             <div class="scc-form-group">
                 <label for="price-config">Price Configuration</label>
                 <textarea name="price-config"><? echo $ret['priceConfig'] ?></textarea>
@@ -94,6 +99,10 @@ function scc_admin_save(){
     } 
     if (isset($_POST['workflow-config'])) {
         update_option('workflow-config', $_POST['workflow-config']);
+        //$value = $_POST['price-config'];
+    } 
+    if (isset($_POST['admin-email'])) {
+        update_option('admin-email', $_POST['admin-email']);
         //$value = $_POST['price-config'];
     } 
 }
