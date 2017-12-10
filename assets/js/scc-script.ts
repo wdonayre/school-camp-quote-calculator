@@ -65,6 +65,8 @@ class SCC_Calculator{
         this._fieldsArray.push(data);
     }
 
+    
+
     public initializeHeight(){
         let windowHeight:number = $(window).outerHeight();
         $(this._mainWrapper).find('.scc-modal-inner').each(function(index,element){
@@ -99,6 +101,7 @@ class SCC_Calculator{
             // Init Next Button
             $(element).find('.scc-next').on('click',function(e){
                 e.preventDefault();
+                //e.preventPropagation();
                 
                 //refresh activities fields
                 if($(this).closest('.scc-modal-inner').attr('data-breakdown') === 'activities'){
@@ -161,7 +164,7 @@ class SCC_Calculator{
                                 if(allowed)
                                 {
                                     activitiesArray += '<div class="col-g-4">'+
-                                                    '<div class="activity-item form-group" style="background-image:url(/wp-content/plugins/school-camp-calculator/assets/images/mountain-climbing.jpg)">'+
+                                                    '<div class="activity-item form-group" style="background-image:url('+tmpActivity.image+')">'+
                                                         '<label class="activity-item-title">'+tmpActivity.text+'</label>'+
                                                         '<span class="activity-item-price">$ '+tmpPrice+'</span>'+
                                                         '<input class="disabled" type="hidden" name="activities" value="'+tmpActivity.name+'" />'+
@@ -177,20 +180,29 @@ class SCC_Calculator{
                         obj.initializeHeight();
                         obj.reinitializeActivities();
                     }
+                    // else if($($(element).closest('.scc-modal-inner').parent().find('.scc-modal-inner')[index+1]).attr('data-view') === 'thankyou'){
+                    //     obj.initializeHeight();
+                    // }
                     $(element).closest('.scc-modal-content').find('.total-price').each(function(index,element){
                         $(element).find('span').text('$'+obj.getTotal());
                     });
                     //this.getTotal()
+                    obj.initializeHeight();
                 }
-                else
-                {
-                    obj.submitFields();    
-                }
+     
+                // {
+                //     obj.submitFields();    
+                // }
                 console.log(obj._fields); //TEMPORARY
                 this._total = obj.getTotal();
                 console.log(this._total);
             });   
             
+            $(element).find('.scc-submit').on('click',function(e){
+                e.preventDefault();
+                $(this).attr('disabled','disabled');
+                obj.submitFields();   
+            });
             //Init Back Button || BACK ||
             $(element).find('.scc-back').on('click',function(e){
                 e.preventDefault();
@@ -426,8 +438,11 @@ class SCC_Calculator{
     private validateFields(fields:any[]){
         let ret:boolean = true;
         let prevKey:string = '';
+        let inGroupFlag;
 
+        inGroupFlag = false;
         for(let field of fields){
+
             if($(field).val().length < 1 && $(field).hasClass('req'))
             {
                 if($(field).closest('.form-group').find('label.overhead-error').length < 1)
@@ -441,9 +456,29 @@ class SCC_Calculator{
             {
                 $(field).parent().removeClass('form-group-error');    
                 $(field).closest('.form-group').find('label.overhead-error').remove();
-                
+                 
                 //update field values
-                
+                if($(fields).closest('.group-req').length > 0){
+                    //inGroupFlag = true;
+
+                    if(!$(field).is(':checked')){
+                          
+                        //check if field is in a group to avoid true -> to -> false group answer
+                        if(inGroupFlag==false){
+                            $(fields).closest('.group-req').addClass('group-error'); 
+                            ret = false;
+                            inGroupFlag = true;
+                        }
+                    }    
+                    else{
+                        ret = true;
+                        $(fields).closest('.group-req').removeClass('group-error');   
+                        inGroupFlag = true;
+                    }
+                }
+                else{
+                    inGroupFlag = false;
+                }
             }
 
             //check email field type
@@ -715,6 +750,7 @@ jQuery(document).ready(function($){
                 text:'Camp Out & Cook Out',
                 name:'camp-out-cook-out',
                 category:'leadership',
+                image:'http://koojarewon.stagingbox.xyz/wp-content/uploads/2017/12/camp-out.jpg',
                 ageGroup:{
                     min:5,
                     max:null
@@ -728,6 +764,7 @@ jQuery(document).ready(function($){
                 text:'Trust Initiatives',
                 name:'trust-initiatives',
                 category:'leadership',
+                image:'http://koojarewon.stagingbox.xyz/wp-content/uploads/2017/12/blank_image.jpg',
                 ageGroup:{
                     min:6,
                     max:null
@@ -740,6 +777,7 @@ jQuery(document).ready(function($){
                 text:'Hoop Pine Climb',
                 name:'hoop-pint-climb',
                 category:'high-adventure',
+                image:'http://koojarewon.stagingbox.xyz/wp-content/uploads/2017/12/hoop-pine-climb.jpg',
                 ageGroup:{
                     min:6,
                     max:null
@@ -751,6 +789,7 @@ jQuery(document).ready(function($){
             {
                 text:'Survivor!!!',
                 name:'survivor',
+                image:'http://koojarewon.stagingbox.xyz/wp-content/uploads/2017/12/survivor.jpg',
                 category:'ground-adventure',
                 ageGroup:{
                     min:5,
@@ -764,6 +803,7 @@ jQuery(document).ready(function($){
                 text:'The Great Escape',
                 name:'the-great-escape',
                 category:'ground-adventure',
+                image:'http://koojarewon.stagingbox.xyz/wp-content/uploads/2017/12/The-Great-Escape.jpg',
                 ageGroup:{
                     min:4,
                     max:null
@@ -776,6 +816,7 @@ jQuery(document).ready(function($){
                 text:'The Island',
                 name:'the-island',
                 category:'ground-adventure',
+                image:'http://koojarewon.stagingbox.xyz/wp-content/uploads/2017/12/The-Island.jpg',
                 ageGroup:{
                     min:3,
                     max:9
@@ -788,6 +829,7 @@ jQuery(document).ready(function($){
                 text:'Jungle Fever',
                 name:'jungle-fever',
                 category:'ground-adventure',
+                image:'http://koojarewon.stagingbox.xyz/wp-content/uploads/2017/12/Jungle-Fever.jpg',
                 ageGroup:{
                     min:null,
                     max:6
@@ -800,6 +842,7 @@ jQuery(document).ready(function($){
                 text:'Team Challenge',
                 name:'team-challenge',
                 category:'team-initiative-activities',
+                image:'http://koojarewon.stagingbox.xyz/wp-content/uploads/2017/12/blank_image.jpg',
                 ageGroup:{
                     min:null,
                     max:null
@@ -811,6 +854,7 @@ jQuery(document).ready(function($){
             {
                 text:'Team Building',
                 name:'team-building',
+                image:'http://koojarewon.stagingbox.xyz/wp-content/uploads/2017/12/blank_image.jpg',
                 category:'team-initiative-activities',
                 ageGroup:{
                     min:null,
@@ -823,6 +867,7 @@ jQuery(document).ready(function($){
             {
                 text:'Wilderness Skills',
                 name:'wilderness-skills',
+                image:'http://koojarewon.stagingbox.xyz/wp-content/uploads/2017/12/blank_image.jpg',
                 category:'team-initiative-activities',
                 ageGroup:{
                     min:5,
@@ -836,6 +881,7 @@ jQuery(document).ready(function($){
                 text:'Scavenger Hunt',
                 name:'scavenger-hunt',
                 category:'exploration',
+                image:'http://koojarewon.stagingbox.xyz/wp-content/uploads/2017/12/Scavenger-Hunt.jpg',
                 ageGroup:{
                     min:3,
                     max:7
@@ -848,6 +894,7 @@ jQuery(document).ready(function($){
                 text:'Nature Walk',
                 name:'nature-walk',
                 category:'exploration',
+                image:'http://koojarewon.stagingbox.xyz/wp-content/uploads/2017/12/Nature-Walk.jpg',
                 ageGroup:{
                     min:null,
                     max:null

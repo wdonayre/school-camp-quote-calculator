@@ -73,12 +73,6 @@ require_once 'includes/mailer/mailer.php';
 //init SCC Mailer Endpoint
 new SCC_Obj();
 
-$headers[] = 'MIME-Version: 1.0';
-$headers[] = 'Content-type: text/html; charset=iso-8859-1';
-
-$headers[] = 'To: William D. <wdonayredroid@gmail.com>';
-$headers[] = 'From: Koojarewon Youth Camp - Enquiry';
-mail(stripslashes(get_option('admin-email', '')), 'Enquiry/Quote', 'testing', implode("\r\n", $headers));
 
 
 

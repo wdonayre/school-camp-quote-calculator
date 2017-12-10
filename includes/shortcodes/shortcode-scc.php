@@ -58,19 +58,19 @@ function step1($display=true){
                     <label>ACCOMMODATION</label>  
                 </div>
                 <div class="form-group col-50p">
-                    <input class="scc-date" type="text" name="arrival-date" placeholder="Arrival Date">
+                    <input class="req scc-date" type="text" name="arrival-date" placeholder="Arrival Date">
                     <label class="overhead-label">Arrival Date</label>
                 </div>
                 <div class="form-group col-50p">
-                    <input class="scc-date" type="text" name="departure-date" placeholder="Departure Date">
+                    <input class="req scc-date" type="text" name="departure-date" placeholder="Departure Date">
                     <label class="overhead-label">Departure Date</label>
                 </div>
                 <div class="form-group col-50p">
-                    <input type="number" name="number-of-adults" placeholder="# of Adults">
+                    <input class="req" type="number" name="number-of-adults" placeholder="# of Adults">
                     <label class="overhead-label"># of Adults</label>
                 </div>
                 <div class="form-group col-50p">
-                    <input type="number" name="number-of-child" placeholder="# of Children">
+                    <input class="req" type="number" name="number-of-child" placeholder="# of Children">
                     <label class="overhead-label"># of Children</label>
                 </div>
             </div>
@@ -95,9 +95,9 @@ function step2($display=true){
             <div class="scc-modal-sub-title">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </div>
         </div>
         <div class="scc-modal-body p-b-30">
-            <div class="grid radio-outer">
+            <div class="grid radio-outer group-req">
                 <div class="col-100p m-b-10">
-                    <label>PLEASE CHOOSE YOUR FIRST MEAL</label>  
+                    <label class="question-title">PLEASE CHOOSE YOUR FIRST MEAL</label>  
                 </div>
                 <div class="form-group col-100p m-b-0">
                     <label class="scc-radio">
@@ -163,9 +163,9 @@ function step3($display=true){
             <div class="scc-modal-sub-title">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </div>
         </div>
         <div class="scc-modal-body p-b-30">
-            <div class="grid">
+            <div class="grid radio-outer group-req">
                 <div class="col-100p m-b-10">
-                    <label>CHOICE OF AGE GROUPS</label>  
+                    <label class="question-title">CHOICE OF AGE GROUPS</label>  
                 </div>
                 <div class="form-group col-100p m-b-0">
                     <label class="scc-radio">
@@ -267,7 +267,7 @@ function step5($display=true){
         <button class="scc-btn scc-cancel fl-left">Cancel</button>
         <div class="fl-right">
             <button class="scc-btn scc-back">Back</button>
-            <button class="scc-btn scc-next ">SUBMIT</button>
+            <button class="scc-btn scc-submit ">SUBMIT</button>
         </div>
         
     </div>
@@ -305,9 +305,9 @@ function endMealSelection($display=true){
             <div class="scc-modal-sub-title">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </div>
         </div>
         <div class="scc-modal-body p-b-30">
-            <div class="grid radio-outer">
+            <div class="grid radio-outer group-req">
                 <div class="col-100p m-b-10">
-                    <label>PLEASE CHOOSE YOUR LAST MEAL</label>  
+                    <label class="question-title">PLEASE CHOOSE YOUR LAST MEAL</label>  
                 </div>
                 <div class="form-group col-100p m-b-0">
                     <label class="scc-radio">

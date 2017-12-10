@@ -1,6 +1,9 @@
 <?php
 /* */
 
+define('MAILGUN_URL', stripslashes(get_option('mailgun-api-base-url', '')));
+define('MAILGUN_KEY', stripslashes(get_option('mailgun-api', ''))); 
+
 class SCC_Obj {
 	
 	/** Hook WordPress
@@ -62,39 +65,46 @@ class SCC_Obj {
 		$message .= $this->getCustomerContent();
 		$message .= file_get_contents(__DIR__.'/common-footer.html');
 
-		$headers[] = 'MIME-Version: 1.0';
-		$headers[] = 'Content-type: text/html; charset=iso-8859-1';
-
-		$headers[] = 'To: '.$_POST['info']['name'].' <'.$_POST['info']['email'].'>';
-		$headers[] = 'From: Koojarewon Youth Camp - Enquiry';
-
-		mail($_POST['info']['email'], 'Thank You for your Enquiry', $message, implode("\r\n", $headers));
+		$ret[] = $this->sendmailbymailgun(
+			$_POST['info']['email'],
+			$_POST['info']['name'],
+			'Koojarewon Youth Camp',
+			stripslashes(get_option('admin-email', '')),
+			'Koojarewon Youth Camp - Thank you!',
+			$message,
+			'',
+			'Koojarewon Enquiry/Quote',
+			stripslashes(get_option('admin-email', ''))
+		);
+		
+		//mail($_POST['info']['email'], 'Thank You for your Enquiry', $message, implode("\r\n", $headers));
 
 		/* ==== SEND TO ADMIN ==== */
-		$message = file_get_contents(__DIR__.'/common-header.html');
-		$message .= $this->getAdminContent();
-		$message .= file_get_contents(__DIR__.'/common-footer.html');
+		 $message = file_get_contents(__DIR__.'/common-header.html');
+		 $message .= $this->getAdminContent();
+		 $message .= file_get_contents(__DIR__.'/common-footer.html');
 
-		$headers[] = 'MIME-Version: 1.0';
-		$headers[] = 'Content-type: text/html; charset=iso-8859-1';
+		// $headers[] = 'MIME-Version: 1.0';
+		// $headers[] = 'Content-type: text/html; charset=iso-8859-1';
 
-		$headers[] = 'To: '.stripslashes(get_option('admin-email', ''));
-		$headers[] = 'From: '.$_POST['info']['name'].'<'.$_POST['info']['email'].'>';
+		// $headers[] = 'To: '.stripslashes(get_option('admin-email', ''));
+		// $headers[] = 'From: '.$_POST['info']['name'].'<'.$_POST['info']['email'].'>';
 
-		mail(stripslashes(get_option('admin-email', '')), 'Enquiry/Quote', $message, implode("\r\n", $headers));
+		//mail(stripslashes(get_option('admin-email', '')), 'Enquiry/Quote', $message, implode("\r\n", $headers));
 		
+		$ret[] = $this->sendmailbymailgun(
+			stripslashes(get_option('admin-email', '')),
+			'Admin - Koojarewon Youth Camp Calculator',
+			$_POST['info']['name'],
+			$_POST['info']['email'],
+			'New Enquiry/Quote Received',
+			$message,
+			'',
+			'Koojarewon Enquiry/Quote Received',
+			$_POST['info']['email']
+		);
 
-        //$this->send_response($_POST['items']['activities'][0]['activity']);
-
-		// if($reqType === "mail"){
-        //     $keys = $_POST['fields'];
-   
-    	//     foreach($keys as $key){
-        //         $ret[$key] = $key; 
-        //     }
-        //     //array_push($ret, array("testing" => get_post_meta('500','property_bedrooms',true))); 
-        //     $this->send_response($ret);
-		// }
+		$this->send_response($ret);
 	}
   
 	 
@@ -392,4 +402,62 @@ class SCC_Obj {
 		<?php
 		return ob_get_clean();
 	}
+
+	/* MAILGUN FUNCTIONS */
+	// private function mailgunSend($to,$from,$msg){
+	// 	$tag = "Koojarewon Quote/Enquiry";
+
+	// 	$apiKey = stripslashes(get_option('mailgun-api', ''));
+	// 	$mailgunDomain = stripslashes(get_option('mailgun-domain', ''));
+	// 	$apiBaseUrl = stripslashes(get_option('mailgun-api-base-url', ''));
+
+	// 	$ch = curl_init($apiBaseUrl."/messages");
+
+	// 	curl_setopt($ch, CURLOPT_FILE, $fp);
+	// 	curl_setopt($ch, CURLOPT_HEADER, 0);
+
+
+
+	// 	curl -s --user 'api:YOUR_API_KEY' \
+	// 	https://api.mailgun.net/v3/YOUR_DOMAIN_NAME/messages \
+	// 	-F from='Sender Bob <sbob@YOUR_DOMAIN_NAME>' \
+	// 	-F to='alice@example.com' \
+	// 	-F subject='Hello' \
+	// 	-F text='Testing some Mailgun awesomness!' \
+	// 	-F o:tag='September newsletter' \
+	// 	-F o:tag='newsletters'
+	// }
+
+
+	
+	private function sendmailbymailgun($to,$toname,$mailfromname,$mailfrom,$subject,$html,$text,$tag,$replyto){
+		$array_data = array(
+			'from'=> $mailfromname .'<'.$mailfrom.'>',
+			'to'=>$toname.'<'.$to.'>',
+			'subject'=>$subject,
+			'html'=>$html,
+			'text'=>$text,
+			'o:tracking'=>'yes',
+			'o:tracking-clicks'=>'yes',
+			'o:tracking-opens'=>'yes',
+			'o:tag'=>$tag,
+			'h:Reply-To'=>$replyto
+		);
+	
+		$session = curl_init(MAILGUN_URL.'/messages');
+		curl_setopt($session, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+		  curl_setopt($session, CURLOPT_USERPWD, 'api:'.MAILGUN_KEY);
+		curl_setopt($session, CURLOPT_POST, true);
+		curl_setopt($session, CURLOPT_POSTFIELDS, $array_data);
+		curl_setopt($session, CURLOPT_HEADER, false);
+		curl_setopt($session, CURLOPT_ENCODING, 'UTF-8');
+		curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($session, CURLOPT_SSL_VERIFYPEER, false);
+		$response = curl_exec($session);
+		curl_close($session);
+		$results = json_decode($response, true);
+		return $results;
+	}
+
+	
 }

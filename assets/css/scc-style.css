@@ -122,7 +122,7 @@ input[type="date"] {
     position: absolute;
     left: 20px;
     top: -5px;
-    font-size: 12px;
+    font-size: 10px;
     background: white;
     padding: 0px 5px;
     line-height: 12px;
@@ -144,8 +144,8 @@ input[type="date"] {
 .form-group .overhead-error {
     position: absolute;
     right: 15px;
-    top: -6px;
-    font-size: 10px;
+    top: -5px;
+    font-size: 8px;
     background: red;
     text-transform: uppercase;
     color: white;
@@ -432,6 +432,8 @@ table.scc-table tbody tr td {
     float: right;
     margin-right: 8px;
     margin-top: 8px;
+    text-decoration: none;
+    box-shadow: none;
 }
 
 .scc-modal-close:hover {
@@ -479,7 +481,7 @@ table.scc-table tbody tr td {
 
 .activity-selector-wrapper .activity-item:before {
     background: black;
-    opacity: 0.1;
+    opacity: 0.5;
     position: absolute;
     z-index: 0;
     width: 100%;
@@ -495,7 +497,7 @@ table.scc-table tbody tr td {
 }
 
 .activity-selector-wrapper .activity-item.selected:before {
-    opacity: 0.2;
+    opacity: 0.5;
     background: #55b49f;
     position: absolute;
     display: inline-block;
@@ -552,17 +554,20 @@ table.scc-table tbody tr td {
 }
 
 .scc-alert h2 {
-    font-size: 22px;
-    font-weight: normal;
+    font-size: 28px;
+    font-weight: bold;
+    line-height: 32px;
 }
 
 .scc-alert h2 img {
     width: 32px;
+    vertical-align: top;
 }
 
 .scc-alert p {
     font-weight: normal;
     font-size: 16px;
+    line-height: 28px;
 }
 
 
@@ -703,4 +708,46 @@ td.subtotal span {
     font-size: 14px !important;
     font-weight: bold;
     margin-left: 15px;
+}
+
+
+/* STATIC MODAL MARGIN TOP */
+
+.scc-modal-inner[data-view="thankyou"] {
+    margin-top: 25%;
+}
+
+.group-req.group-error label.question-title:after {
+    content: '* Selection one option to proceed';
+    display: block;
+    font-size: 10px;
+    color: red;
+    font-weight: normal;
+}
+
+
+/* RESPONSIVE */
+
+@media (max-width:540px) {
+    .col-50p {
+        width: 100%;
+    }
+    .activity-selector-wrapper .col-g-4 {
+        width: 50%;
+    }
+}
+
+@media (max-width:360px) {
+    .activity-selector-wrapper {
+        text-align: center;
+    }
+    .activity-selector-wrapper .col-g-4 {
+        width: 100%;
+        margin: 0 auto;
+        display: inline-block;
+        float: none;
+    }
+    .activity-selector-wrapper .col-g-4 .activity-item {
+        height: 150px;
+    }
 }

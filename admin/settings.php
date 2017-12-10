@@ -27,7 +27,9 @@ function scc_render_settings_page() {
         'priceConfig' => stripslashes(get_option('price-config', '')),
         'workflowConfig' => stripslashes(get_option('workflow-config', '')),
         'adminEmail' => stripslashes(get_option('admin-email', '')),
-
+        'mailgunDomain' => stripslashes(get_option('mailgun-domain', '')),
+        'mailgunApi' => stripslashes(get_option('mailgun-api', '')),
+        'mailgunApiBaseUrl' => stripslashes(get_option('mailgun-api-base-url', '')),
     );
 
     ob_start();
@@ -50,6 +52,24 @@ function scc_render_settings_page() {
             <div class="scc-form-group">
                 <label for="workflow-config">Workflow Configuration</label>
                 <textarea name="workflow-config"><? echo $ret['workflowConfig'] ?></textarea>
+            </div>
+            <br><hr>
+
+            <h2>MAILGUN API SETTINGS</h2>
+
+            <div class="scc-form-group">
+                <label for="mailgun-domain">Mailgun Domain</label>
+                <input name="mailgun-domain" value="<? echo $ret['mailgunDomain'] ?>" />
+            </div>
+
+            <div class="scc-form-group">
+                <label for="mailgun-api">Mailgun API</label>
+                <input name="mailgun-api" value="<? echo $ret['mailgunApi'] ?>" />
+            </div>
+
+            <div class="scc-form-group">
+                <label for="mailgun-api-base-url">Mailgun API Base Url</label>
+                <input name="mailgun-api-base-url" value="<? echo $ret['mailgunApiBaseUrl'] ?>" />
             </div>
 
             <br/>
@@ -105,4 +125,16 @@ function scc_admin_save(){
         update_option('admin-email', $_POST['admin-email']);
         //$value = $_POST['price-config'];
     } 
+
+    /* MAIL GUN */
+    if (isset($_POST['mailgun-domain'])) {
+        update_option('mailgun-domain', $_POST['mailgun-domain']);
+    } 
+    if (isset($_POST['mailgun-api'])) {
+        update_option('mailgun-api', $_POST['mailgun-api']);
+    } 
+    if (isset($_POST['mailgun-api-base-url'])) {
+        update_option('mailgun-api-base-url', $_POST['mailgun-api-base-url']);
+    } 
+
 }
