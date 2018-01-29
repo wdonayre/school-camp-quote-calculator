@@ -233,28 +233,97 @@ class SCC_Obj {
 													<!-- insert content here -->
 													
 													<table width="100%">
-														<!-- accommodation-->
-														<?php echo $this->getItem('accommodation');?>
-														<!-- meals-->
-														<?php echo $this->getItem('meals');?>
-														<!-- activities-->
-														<?php echo $this->getItem('activities');?>
+														<!-- adults -->
+														<tr>
+															<th colspan="2" style="padding-left:5px;text-transform:capitalize;background:#646464;color:white">Adults</th>
+														</tr>
+														<tr>
+															<td>Accomodation x <?php echo $_POST['items']['accommodation'][0]['quantity']?> day(s)</td>
+															<td style="text-align:right;"><?php echo  '$ '.number_format((float)$_POST['items']['accommodation'][0]['amount'],2)?></td>
+														</tr>
+														<tr>
+															<td>Meals x <?php echo $_POST['items']['meals']['adults']['quantity']?></td>
+															<td style="text-align:right;">$ <?php echo  number_format((float)$_POST['items']['meals']['adults']['amount'],2)?></td>
+														</tr>
+														<tr>
+															<td><strong>Price per Adult</strong></td>
+															<td style="text-align:right;"><strong style="width:150px; display:inline-block;"> 
+																<?php
+																	$pricePerAdult = number_format(((float)$_POST['items']['accommodation'][0]['amount'] + (float)$_POST['items']['meals']['adults']['amount']),2);
+																	echo '$ '.$pricePerAdult;
+																?>
+															</strong></td>
+														</tr>
 
+														<!-- children -->
+														<tr>
+															<th colspan="2" style="padding-left:5px;text-transform:capitalize;background:#646464;color:white">Children</th>
+														</tr>
+														<tr>
+															<td>Accomodation x <?php echo $_POST['items']['accommodation'][1]['quantity']?> day(s)</td>
+															<td style="text-align:right;"><?php echo  '$ '.number_format((float)$_POST['items']['accommodation'][1]['amount'],2)?></td>
+														</tr>
+														<tr>
+															<td>Meals x <?php echo $_POST['items']['meals']['child']['quantity']?></td>
+															<td style="text-align:right;">$ <?php echo  number_format((float)$_POST['items']['meals']['child']['amount'],2)?></td>
+														</tr>
+														<?php
+															$totalActivityPerChild = 0;
+															foreach($_POST['items']['activities'] as $key => $value){
+																$totalActivityPerChild += (float)$value['price'];
+															}	
+														?>
+														<tr>
+															<td>Activities</td>
+															<td style="text-align:right;">$ <?php echo number_format($totalActivityPerChild,2) ?></td>
+														</tr>
+													
+														<tr>
+															<td><strong>Price per Child</strong></td>
+															<td style="text-align:right;"><strong style="width:150px;"> 
+																
+																<?php
+																	$pricePerChild = number_format($totalActivityPerChild+ number_format(((float)$_POST['items']['accommodation'][1]['amount'] + (float)$_POST['items']['meals']['child']['amount']),2),2);
+																	echo '$ '. $pricePerChild;
+																?>
+															</strong></td>
+														</tr>
+
+														</table>
+
+														<table style="width:100%; margin-top:15px; border-top:1px solid #e0e0e0;">
 														<!-- general total -->
 														<tr>
-															<td colspan="2" style="padding:3px 5px; text-align:left; background:#f5f5f5;">
-																ADULT TOTAL: $<?php echo number_format($this->adultTotal,2); ?>
+															<td></td>
+															<td></td>
+															<td>Pax</td>
+															<td></td>
+														</tr>
+														<tr>
+															<td>
+																<strong>Adult Total</strong>
 															</td>
+															<td><?php echo '$ '.$pricePerAdult; ?></td>
+															<td><?php echo $_POST['info']['number-of-adults']?></td>
+															<td style="text-align:right;"><?php $adultTotal = (((float)$_POST['info']['number-of-adults']) * $pricePerAdult ); echo '$'. number_format($adultTotal,2)?></td>
 														</tr>
 
 														<tr>
-															<td colspan="2" style="padding:3px 5px; text-align:left; background:#f5f5f5;">
-																CHILD TOTAL: $<?php echo number_format($this->childTotal,2); ?>
+															<td>
+																<strong>Children Total</strong>
 															</td>
+															<td><?php echo '$ '.$pricePerChild; ?></td>
+															<td><?php echo $_POST['info']['number-of-child']?></td>
+															<td style="text-align:right;"><?php $childrenTotal = (((float)$_POST['info']['number-of-child']) * $pricePerChild ); echo '$'. number_format($childrenTotal,2)?></td>
 														</tr>
 														<tr>
-															<td colspan="2" style="font-weight:bold; padding:3px 5px; text-align:left; background:#f5f5f5; font-size:16px;">
-																GENERAL TOTAL: $<?php echo number_format(($this->childTotal + $this->adultTotal),2); ?>
+															<td>
+																<h3><strong>TOTAL CAMP PRICE</strong></h3>
+															</td>
+															<td></td>
+															<td></td>
+															<td style="text-align:right;">
+																$<?php echo number_format(($childrenTotal + $adultTotal),2);?>
 															</td>
 														</tr>
 														
@@ -340,41 +409,102 @@ class SCC_Obj {
                                                             <th>Departure Date</th>
                                                             <td><?php echo $_POST['info']['departure-date']?></td>
                                                         </tr>
-														<tr>
-                                                            <th>Start Meal</th>
-                                                            <td><?php echo $_POST['info']['meal']?></td>
-                                                        </tr>
-														<tr>
-                                                            <th>Last Meal</th>
-                                                            <td><?php echo $_POST['info']['end-meal']?></td>
-                                                        </tr>
                                                     </tbody></table>
                                                     <br>
 													<!-- insert content here -->
 													
 													<table width="100%">
-														<!-- accommodation-->
-														<?php echo $this->getItem('accommodation');?>
-														<!-- meals-->
-														<?php echo $this->getItem('meals');?>
-														<!-- activities-->
-														<?php echo $this->getItem('activities');?>
+														<!-- adults -->
+														<tr>
+															<th colspan="2" style="padding-left:5px;text-transform:capitalize;background:#646464;color:white">Adults</th>
+														</tr>
+														<tr>
+															<td>Accomodation x <?php echo $_POST['items']['accommodation'][0]['quantity']?> day(s)</td>
+															<td style="text-align:right;"><?php echo  '$ '.number_format((float)$_POST['items']['accommodation'][0]['amount'],2)?></td>
+														</tr>
+														<tr>
+															<td>Meals x <?php echo $_POST['items']['meals']['adults']['quantity']?></td>
+															<td style="text-align:right;">$ <?php echo  number_format((float)$_POST['items']['meals']['adults']['amount'],2)?></td>
+														</tr>
+														<tr>
+															<td><strong>Price per Adult</strong></td>
+															<td style="text-align:right;"><strong style="width:150px; display:inline-block;"> 
+																<?php
+																	$pricePerAdult = number_format(((float)$_POST['items']['accommodation'][0]['amount'] + (float)$_POST['items']['meals']['adults']['amount']),2);
+																	echo '$ '.$pricePerAdult;
+																?>
+															</strong></td>
+														</tr>
 
+														<!-- children -->
+														<tr>
+															<th colspan="2" style="padding-left:5px;text-transform:capitalize;background:#646464;color:white">Children</th>
+														</tr>
+														<tr>
+															<td>Accomodation x <?php echo $_POST['items']['accommodation'][1]['quantity']?> day(s)</td>
+															<td style="text-align:right;"><?php echo  '$ '.number_format((float)$_POST['items']['accommodation'][1]['amount'],2)?></td>
+														</tr>
+														<tr>
+															<td>Meals x <?php echo $_POST['items']['meals']['child']['quantity']?></td>
+															<td style="text-align:right;">$ <?php echo  number_format((float)$_POST['items']['meals']['child']['amount'],2)?></td>
+														</tr>
+														<?php
+															$totalActivityPerChild = 0;
+															foreach($_POST['items']['activities'] as $key => $value){
+																$totalActivityPerChild += (float)$value['price'];
+															}	
+														?>
+														<tr>
+															<td>Activities</td>
+															<td style="text-align:right;">$ <?php echo number_format($totalActivityPerChild,2) ?></td>
+														</tr>
+													
+														<tr>
+															<td><strong>Price per Child</strong></td>
+															<td style="text-align:right;"><strong style="width:150px;"> 
+																
+																<?php
+																	$pricePerChild = number_format($totalActivityPerChild+ number_format(((float)$_POST['items']['accommodation'][1]['amount'] + (float)$_POST['items']['meals']['child']['amount']),2),2);
+																	echo '$ '. $pricePerChild;
+																?>
+															</strong></td>
+														</tr>
+
+														</table>
+
+														<table style="width:100%; margin-top:15px; border-top:1px solid #e0e0e0;">
 														<!-- general total -->
 														<tr>
-															<td colspan="2" style="padding:3px 5px; text-align:left; background:#f5f5f5;">
-																ADULT TOTAL: $<?php echo number_format($this->adultTotal,2); ?>
+															<td></td>
+															<td></td>
+															<td>Pax</td>
+															<td></td>
+														</tr>
+														<tr>
+															<td>
+																<strong>Adult Total</strong>
 															</td>
+															<td><?php echo '$ '.$pricePerAdult; ?></td>
+															<td><?php echo $_POST['info']['number-of-adults']?></td>
+															<td style="text-align:right;"><?php $adultTotal = (((float)$_POST['info']['number-of-adults']) * $pricePerAdult ); echo '$'. number_format($adultTotal,2)?></td>
 														</tr>
 
 														<tr>
-															<td colspan="2" style="padding:3px 5px; text-align:left; background:#f5f5f5;">
-																CHILD TOTAL: $<?php echo number_format($this->childTotal,2); ?>
+															<td>
+																<strong>Children Total</strong>
 															</td>
+															<td><?php echo '$ '.$pricePerChild; ?></td>
+															<td><?php echo $_POST['info']['number-of-child']?></td>
+															<td style="text-align:right;"><?php $childrenTotal = (((float)$_POST['info']['number-of-child']) * $pricePerChild ); echo '$'. number_format($childrenTotal,2)?></td>
 														</tr>
 														<tr>
-															<td colspan="2" style="font-weight:bold; padding:3px 5px; text-align:left; background:#f5f5f5; font-size:16px;">
-																GENERAL TOTAL: $<?php echo number_format(($this->childTotal + $this->adultTotal),2); ?>
+															<td>
+																<h3><strong>TOTAL CAMP PRICE</strong></h3>
+															</td>
+															<td></td>
+															<td></td>
+															<td style="text-align:right;">
+																$<?php echo number_format(($childrenTotal + $adultTotal),2);?>
 															</td>
 														</tr>
 														

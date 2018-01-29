@@ -370,8 +370,8 @@ class SCC_Calculator{
                     this._priceList['activities'][this._fields.activities[a]]['price']['adults']:
                     this._priceList['activities'][this._fields.activities[a]]['price']['default'];
 
-                let totalPax:number = (parseInt(this._fields['number-of-adults']) + parseInt(this._fields['number-of-child']));
-                activityItems[a] = {text:this._priceList['activities'][this._fields.activities[a]]['text']+' @ '+totalPax+'pax',amount: tmpPrice * totalPax,price:tmpPrice};
+                let totalPax:number = /*(parseInt(this._fields['number-of-adults']) + */parseInt(this._fields['number-of-child'])/*)*/;
+                activityItems[a] = {text:this._priceList['activities'][this._fields.activities[a]]['text']/*+' @ '+totalPax+'pax'*/,amount: tmpPrice * totalPax,price:tmpPrice};
             
             }
             this._breakdown[key] = {
@@ -597,7 +597,7 @@ class SCC_Calculator{
 
 
         //ACCOMMODATION
-        tmpTables += '<table class="scc-table">'+'<thead>'+'<tr>'+'<th colspan="2">Accommodation</th>'+'</tr>'+'</thead>'+'<tbody>'+'<tr>'+'<td>'+this._breakdown['accommodation']['items'][0].text+'@'+this._fields['number-of-adults']+'pax/'+this._breakdown['accommodation']['items'][0].quantity+'days'+'</td>'+'<td class="text-right">$'+parseFloat(this._breakdown['accommodation']['items'][0].amount).toFixed(2)+'</td>'+'</tr>'+'<tr>'+'<td>'+this._breakdown['accommodation']['items'][1].text+'@'+this._fields['number-of-child']+'pax/'+this._breakdown['accommodation']['items'][1].quantity+'days'+'</td>'+'<td class="text-right">$'+parseFloat(this._breakdown['accommodation']['items'][1].amount).toFixed(2)+'</td>'+'</tr>'+'<tr><td colspan="2" class="subtotal">Subtotal: <span>$'+ parseFloat((this._breakdown['accommodation']['items'][0].amount + this._breakdown['accommodation']['items'][1].amount)+'').toFixed(2) +'</span></td></tr></tbody>'+'</table>';
+        ////tmpTables += '<table class="scc-table">'+'<thead>'+'<tr>'+'<th colspan="2">Accommodation</th>'+'</tr>'+'</thead>'+'<tbody>'+'<tr>'+'<td>'+this._breakdown['accommodation']['items'][0].text+'@'+this._fields['number-of-adults']+'pax/'+this._breakdown['accommodation']['items'][0].quantity+'days'+'</td>'+'<td class="text-right">$'+parseFloat(this._breakdown['accommodation']['items'][0].amount).toFixed(2)+'</td>'+'</tr>'+'<tr>'+'<td>'+this._breakdown['accommodation']['items'][1].text+'@'+this._fields['number-of-child']+'pax/'+this._breakdown['accommodation']['items'][1].quantity+'days'+'</td>'+'<td class="text-right">$'+parseFloat(this._breakdown['accommodation']['items'][1].amount).toFixed(2)+'</td>'+'</tr>'+'<tr><td colspan="2" class="subtotal">Subtotal: <span>$'+ parseFloat((this._breakdown['accommodation']['items'][0].amount + this._breakdown['accommodation']['items'][1].amount)+'').toFixed(2) +'</span></td></tr></tbody>'+'</table>';
         //Update breakdown summary
         this._breakdownSummary.accommodation = this._breakdown['accommodation']['items'];
         
@@ -630,8 +630,25 @@ class SCC_Calculator{
         _tbl+='<tr><td>Adults @ '+mealQtyAdults+' meal(s)</td><td class="text-right">$'+parseFloat(mealAdultTotal+'').toFixed(2)+'</td></tr>';
         _tbl+='<tr><td>Child @ '+mealQtyChild+' meal(s)</td><td class="text-right">$'+parseFloat(mealChildTotal+'').toFixed(2)+'</td></tr>';
         _tbl+='<tr><td colspan="2" class="subtotal">Subtotal: <span>$'+ parseFloat((mealAdultTotal + mealChildTotal)+'').toFixed(2) +'</span></td></tr>';
-        tmpTables += '<table class="scc-table">'+'<thead>'+'<tr>'+'<th colspan="2">Meals</th>'+'</tr>'+'</thead>'+'<tbody>'+_tbl+'</tbody>'+'</table>';
+        ////tmpTables += '<table class="scc-table">'+'<thead>'+'<tr>'+'<th colspan="2">Meals</th>'+'</tr>'+'</thead>'+'<tbody>'+_tbl+'</tbody>'+'</table>';
         
+        //ADULTS
+        var pricePerAdults = parseFloat(this._breakdown['accommodation']['items'][0].amount) + parseFloat(mealAdultTotal+'');
+        tmpTables +=    '<table class="scc-table">'+
+                            '<thead><th colspan="2">Adults</th></thead>'+
+                            '<tbody>'+
+                                '<tr>'+
+                                    '<td>Accomodation x '+ this._breakdown['accommodation']['items'][0].quantity +' day(s)</td>'+
+                                    '<td>$'+parseFloat(this._breakdown['accommodation']['items'][0].amount).toFixed(2)+'</td>'+
+                                '</tr>'+
+                                '<tr>'+
+                                    '<td>Meals x '+ mealQtyAdults +' meal(s)</td>'+
+                                    '<td>$'+parseFloat(mealAdultTotal+'').toFixed(2)+'</td>'+
+                                '</tr>'+
+                                '<tr><td><strong>Price per adult</strong></td> <td><strong>$'+parseFloat(pricePerAdults + '').toFixed(2)+'</strong></td></tr>'
+                            '</tbody>'+
+                        '</table>';
+
         
         //ACTIVITIES
         _tbl = '';
@@ -647,19 +664,74 @@ class SCC_Calculator{
                         '<td class="text-right">$'+parseFloat(this._breakdown['activities'].items[m]['amount']).toFixed(2)+'</td>'+
                     '</tr>';
             this._breakdownSummary.activities.push({activity:this._breakdown['activities'].items[m]['text'], amount: this._breakdown['activities'].items[m]['amount'],price:this._breakdown['activities'].items[m]['price']});
-            activityTotalAmount += this._breakdown['activities'].items[m]['amount'];
+            activityTotalAmount += this._breakdown['activities'].items[m]['price'];
         }
         _tbl += '<tr><td colspan="2" class="subtotal">Subtotal: <span>$'+ parseFloat(activityTotalAmount + '').toFixed(2) +'</span></td></tr>';
-        tmpTables += '<table class="scc-table">'+'<thead>'+'<tr>'+'<th colspan="2">Activities</th>'+'</tr>'+'</thead>'+'<tbody>'+_tbl+'</tbody>'+'</table>';
+        ////tmpTables += '<table class="scc-table">'+'<thead>'+'<tr>'+'<th colspan="2">Activities</th>'+'</tr>'+'</thead>'+'<tbody>'+_tbl+'</tbody>'+'</table>';
         
+        
+        ////console.log("BREAKDOWN");
+        ////console.log(this._breakdown);
+        //console.log(this._breakdownSummary);
+
+        //CHILDREN
+        var pricePerChild = parseFloat(this._breakdown['accommodation']['items'][1].amount) + parseFloat(mealChildTotal+'') + parseFloat(activityTotalAmount+'');
+        tmpTables +=    '<table class="scc-table">'+
+                            '<thead><th colspan="2">Children</th></thead>'+
+                            '<tbody>'+
+                                '<tr>'+
+                                    '<td>Accomodation x '+ this._breakdown['accommodation']['items'][1].quantity +' day(s)</td>'+
+                                    '<td>$'+parseFloat(this._breakdown['accommodation']['items'][1].amount).toFixed(2)+'</td>'+
+                                '</tr>'+
+                                '<tr>'+
+                                    '<td>Meals x '+ mealQtyChild +' meal(s)</td>'+
+                                    '<td>$'+parseFloat(mealChildTotal+'').toFixed(2)+'</td>'+
+                                '</tr>'+
+                                '<tr>'+
+                                    '<td>Activities</td>'+
+                                    '<td>$'+parseFloat(activityTotalAmount+'').toFixed(2)+'</td>'+
+                                '</tr>'+
+                                '<tr><td><strong>Price Per Child</strong></td> <td><strong>$'+parseFloat(pricePerChild + '').toFixed(2)+'</strong></td></tr>'
+                            '</tbody>'+
+                        '</table>';
+
         $(breakdownView).append('<div class="col-100p">'+tmpTables+'</div>');
 
-        $(breakdownView).append('<div class="main-price-total">ADULT TOTAL: <span style="color:#343434;">$'+parseFloat(this._totalDetails.adults+'').toFixed(2)+'</span> <br> CHILD TOTAL: <span style="color:#343434;">$'+parseFloat(this._totalDetails.child+'').toFixed(2)+'</span> <br> <strong>GENERAL TOTAL:</strong> <span>$'+parseFloat(this._total+'').toFixed(2)+'</span></div><br>')
+        //$(breakdownView).append('<div class="main-price-total">ADULTS TOTAL: <span style="color:#343434;">$'+parseFloat(this._totalDetails.adults+'').toFixed(2)+'</span> <br> CHILDREN TOTAL: <span style="color:#343434;">$'+parseFloat(this._totalDetails.child+'').toFixed(2)+'</span> <br> <strong>TOTAL CAMP PRICE:</strong> <span>$'+parseFloat(this._total+'').toFixed(2)+'</span></div><br>')
+        
+        var TotalAdult = (pricePerAdults * parseInt(this._fields['number-of-adults']));
+        var TotalChild = (pricePerChild * parseInt(this._fields['number-of-child']));
+        $(breakdownView).append(
+            '<table>'+
+            '   <tbody>'+
+            '       <tr>'+
+            '           <td></td>'+
+            '           <td></td>'+
+            '           <td>Pax</td>'+
+            '           <td></td>'+
+            '       </tr>'+
+            '       <tr>'+
+            '           <th>Adults Total</th>'+
+            '           <td>'+pricePerAdults+'</td>'+
+            '           <td>'+parseInt(this._fields['number-of-adults'])+'</td>'+
+            '           <td>$'+TotalAdult+'</td>'+
+            '       </tr>'+
+            '       <tr>'+
+            '           <th>Children Total</th>'+
+            '           <td>'+pricePerChild+'</td>'+
+            '           <td>'+parseInt(this._fields['number-of-child'])+'</td>'+
+            '           <td>$'+TotalChild+'</td>'+
+            '       </tr>'+
+            '       <tr>'+
+            '           <th>TOTAL CAMP PRICE</th>'+
+            '           <td></td>'+
+            '           <td></td>'+
+            '           <td>$'+(TotalAdult + TotalChild)+'</td>'+
+            '       </tr>'+
+            '   </tbody>'+
+            '</table>'
+        );
 
-
-        console.log("BREAKDOWN");
-        console.log(this._breakdown);
-        //console.log(this._breakdownSummary);
     }
 
     /*------------------------
