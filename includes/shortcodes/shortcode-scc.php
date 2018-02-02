@@ -66,11 +66,11 @@ function step1($display=true){
                     <label class="overhead-label">Departure Date</label>
                 </div>
                 <div class="form-group col-50p">
-                    <input class="req" type="number" name="number-of-adults" placeholder="# of Adults">
+                    <input min="0" class="req" type="number" name="number-of-adults" placeholder="# of Adults">
                     <label class="overhead-label"># of Adults</label>
                 </div>
                 <div class="form-group col-50p">
-                    <input class="req" type="number" name="number-of-child" placeholder="# of Children">
+                    <input min="0" class="req" type="number" name="number-of-child" placeholder="# of Children">
                     <label class="overhead-label"># of Children</label>
                 </div>
             </div>
@@ -105,36 +105,36 @@ function step2($display=true){
                         Breakfast
                     </label>
                 </div>
-                <div class="form-group col-100p m-b-0">
+                <!-- <div class="form-group col-100p m-b-0">
                     <label class="scc-radio">
                         <input type="radio" name="meal" value="atea"/>
                         A/Tea
                     </label>
-                </div>
+                </div> -->
                 <div class="form-group col-100p m-b-0">
                     <label class="scc-radio">
                         <input type="radio" name="meal" value="lunch"/>
                         Lunch
                     </label>
                 </div>
-                <div class="form-group col-100p m-b-0">
+                <!-- <div class="form-group col-100p m-b-0">
                     <label class="scc-radio">
                         <input type="radio" name="meal" value="snacks"/>
                         Snacks
                     </label>
-                </div>
+                </div> -->
                 <div class="form-group col-100p m-b-0">
                     <label class="scc-radio">
                         <input type="radio" name="meal" value="dinner"/>
                         Dinner
                     </label>
                 </div>
-                <div class="form-group col-100p m-b-0">
+                <!-- <div class="form-group col-100p m-b-0">
                     <label class="scc-radio">
                         <input type="radio" name="meal" value="supper"/>
                         Supper
                     </label>
-                </div>
+                </div> -->
                 
             </div>
         </div>
@@ -315,36 +315,36 @@ function endMealSelection($display=true){
                         Breakfast
                     </label>
                 </div>
-                <div class="form-group col-100p m-b-0">
+                <!-- <div class="form-group col-100p m-b-0">
                     <label class="scc-radio">
                         <input type="radio" name="end-meal" value="atea"/>
                         A/Tea
                     </label>
-                </div>
+                </div> -->
                 <div class="form-group col-100p m-b-0">
                     <label class="scc-radio">
                         <input type="radio" name="end-meal" value="lunch"/>
                         Lunch
                     </label>
                 </div>
-                <div class="form-group col-100p m-b-0">
+                <!-- <div class="form-group col-100p m-b-0">
                     <label class="scc-radio">
                         <input type="radio" name="end-meal" value="snacks"/>
                         Snacks
                     </label>
-                </div>
+                </div> -->
                 <div class="form-group col-100p m-b-0">
                     <label class="scc-radio">
                         <input type="radio" name="end-meal" value="dinner"/>
                         Dinner
                     </label>
                 </div>
-                <div class="form-group col-100p m-b-0">
+                <!-- <div class="form-group col-100p m-b-0">
                     <label class="scc-radio">
                         <input type="radio" name="end-meal" value="supper"/>
                         Supper
                     </label>
-                </div>
+                </div> -->
                 
             </div>
         </div>

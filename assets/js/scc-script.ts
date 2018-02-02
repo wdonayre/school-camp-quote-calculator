@@ -253,12 +253,12 @@ class SCC_Calculator{
             }
         }
 
-        var arrival =  new Date(this._fields['arrival-date']);  
-        var departure = new Date(this._fields['departure-date']); 
+        var arrival =  new Date(this._fields['arrival-date'].split('/')[2],this._fields['arrival-date'].split('/')[1]-1,this._fields['arrival-date'].split('/')[0]);  
+        var departure = new Date(this._fields['departure-date'].split('/')[2],this._fields['departure-date'].split('/')[1]-1,this._fields['departure-date'].split('/')[0]); 
         var diff = Math.ceil( Math.abs(departure.getTime() - arrival.getTime())  / (1000 * 3600 * 24));  //days/nights stay
         
         let numAdults:number = parseInt(this._fields['number-of-adults']);
-        let numChild:number = parseInt(this._fields['number-of-child']);
+        let numChild:number = parseInt(this._fields['number-of-child']); 
 
         if(key==='accommodation')
         {
@@ -776,14 +776,14 @@ jQuery(document).ready(function($){
                     others: 14.50
                 }
             },
-            {
-                text:'A/Tea',
-                name:'atea',
-                price:{
-                    adults:3.50,
-                    others:3.50
-                }
-            },
+            // {
+            //     text:'A/Tea',
+            //     name:'atea',
+            //     price:{
+            //         adults:3.50,
+            //         others:3.50
+            //     }
+            // },
             {
                 text:'Lunch',
                 name:'lunch',
@@ -792,14 +792,14 @@ jQuery(document).ready(function($){
                     others:14.50
                 }
             },
-            {
-                text:'Snacks',
-                name:'snacks',
-                price:{
-                    adults:3.50,
-                    others:3.50
-                }
-            },
+            // {
+            //     text:'Snacks',
+            //     name:'snacks',
+            //     price:{
+            //         adults:3.50,
+            //         others:3.50
+            //     }
+            // },
             {
                 text:'Dinner',
                 name:'dinner',
@@ -808,14 +808,14 @@ jQuery(document).ready(function($){
                     others:14.50
                 }
             },
-            {
-                text:'Supper',
-                name:'supper',
-                price:{
-                    adults:17.25,
-                    others:14.50
-                }
-            } 
+            // {
+            //     text:'Supper',
+            //     name:'supper',
+            //     price:{
+            //         adults:17.25,
+            //         others:14.50
+            //     }
+            // } 
         ],
         activities:[
             {
@@ -1012,6 +1012,7 @@ jQuery(document).ready(function($){
     $( "input.scc-date" ).datepicker({
         inline: true,
         minDate: dateToday,
+        dateFormat: 'dd/mm/yy' 
     });
 
     $("button.scc-modal-trigger").on('click',function(e){
